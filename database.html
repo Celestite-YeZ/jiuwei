@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>九尾狐谱系库</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap');
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            background: url('database-bg.png') center/cover fixed;
+            min-height: 100vh;
+            color: #fff;
+            margin: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+            overflow-x: hidden;
+            animation: fadeSlideIn 0.8s ease-out;
+            will-change: transform, opacity; /* 提高动画稳定性 */
+            position: relative;
+        }
+
+        @keyframes fadeSlideIn {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeSlideOut {
+            to {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+        }
+
+        .page-title {
+            text-align: center;
+            padding: 40px 0;
+            font-size: 3.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 5px;
+            background: linear-gradient(to right, #874633, #d17c5f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15%;
+            height: 70vh;
+            position: relative;
+        }
+
+        .center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .center img {
+            width: 300px;
+            filter: drop-shadow(0 0 30px rgba(135,70,51,0.6));
+        }
+
+        .link-box {
+            color: #874633 !important;
+            font-size: 3em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            font-family: 'Ma Shan Zheng', cursive;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .link-box:hover {
+            transform: rotate(15deg) scale(1.2);
+            background: rgba(255,255,255,0.3) !important;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: rgba(135,70,51,0.9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 9999;
+            transform: none !important; /* 移除干扰性 transform */
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">← 返回</button>
+
+    <h1 class="page-title">九尾狐谱系库</h1>
+
+    <div class="container">
+        <a href="relation.html" class="link-box" style="order: 1;">
+            <span>关系图谱</span>
+        </a>
+
+        <div class="center">
+            <img src="nine-tails-center.png" alt="九尾狐核心图腾">
+        </div>
+
+        <a href="dynasty.html" class="link-box" style="order: 3;">
+            <span>朝代谱系</span>
+        </a>
+    </div>
+
+    <script>
+        function goBack() {
+            document.body.style.animation = 'fadeSlideOut 0.6s forwards';
+            setTimeout(() => {
+                window.history.back();
+            }, 600);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+/* 页面入场动画 */
+@keyframes pageIn {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* 页面退场动画 */
+@keyframes pageOut {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(-30px); }
+}
+
+.page-transition {
+    animation: pageIn 0.5s ease-out forwards;
+}
+
+body { 
+    opacity: 0; /* 初始状态隐藏 */
+    overflow-x: hidden; /* 防止横向滚动条 */
+}
+</style>
+    <title>九尾狐文化库</title>
+    <style>
+        body {
+            background-image: url('background.png');
+            background-size: cover;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: flex-end; /* 垂直方向靠下 */
+            padding-bottom: 15vh; /* 距离底部的高度 */
+        }
+        .buttons {
+            margin-bottom: 50px; /* 额外增加底部间距 */
+        }
+        .btn {
+            display: inline-block;
+            padding: 30px 60px;  /* 增大按钮尺寸 */
+            margin: 30px;        /* 增大按钮间距 */
+            background: rgba(255,255,255,0.3);
+            border: 3px solid #874633; /* 边框颜色与字体同色 */
+            color: #874633;      /* 字体颜色 */
+            text-decoration: none;
+            font-size: 30px;    /* 增大字体 */
+            border-radius: 15px; /* 更圆润的边框 */
+            transition: all 0.3s;
+            font-weight: bold;   /* 加粗字体 */
+            letter-spacing: 2px; /* 字间距 */
+        }
+        .btn:hover {
+            background: rgba(255,255,255,0.5);
+            transform: scale(1.15); /* 放大效果增强 */
+            box-shadow: 0 0 20px rgba(135,70,51,0.5); /* 添加同色系阴影 */
+        }
+    </style>
+</head>
+<body>
+    <div class="buttons">
+        <a href="gallery.html" class="btn">九尾狐图集</a>
+        <a href="database.html" class="btn">九尾狐谱系库</a>
+    </div>
+	<script>
+// 页面加载完成后触发入场动画
+window.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('page-transition');
+});
+
+// 给所有跳转链接添加退场动画
+document.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault(); // 阻止默认跳转
+        document.body.classList.add('page-out');
+        
+        // 0.3秒后执行跳转（与动画时间匹配）
+        setTimeout(() => {
+            window.location.href = link.href;
+        }, 300);
+    });
+});
+</script>
+</body>
+</html>

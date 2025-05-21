@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>九尾狐图像展示</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'ZCOOL XiaoWei', cursive;
+      background: url('database-bg.png') center/cover no-repeat fixed;
+    }
+    .gallery {
+      column-count: 4;
+      column-gap: 1em;
+      padding: 1em;
+    }
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 1em;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .gallery-item:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+    }
+    .caption {
+      padding: 0.5em 1em;
+      font-size: 16px;
+      text-align: center;
+      color: #444;
+    }
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .overlay-content {
+      max-width: 80vw;
+      max-height: 80vh;
+      position: relative;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .overlay img {
+      width: 100%;
+      height: auto;
+    }
+    .overlay .caption {
+      background: #f9f9f9;
+      font-size: 18px;
+      text-align: center;
+      padding: 10px 16px;
+      color: #333;
+    }
+    .overlay-close {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-size: 24px;
+      color: #444;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header style="text-align: center; padding: 1.5em 0; background: rgba(255,255,255,0.6); box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+    <h1 style="font-size: 32px; color: #5C3A21; margin: 0;">九尾狐图像展示</h1>
+    <a href="index.html" style="display: inline-block; margin-top: 10px; padding: 8px 20px; background: #874633; color: white; text-decoration: none; border-radius: 6px; font-size: 16px;">返回首页</a>
+  </header>
+  <div class="gallery" style="margin-top: 1em;">
+    <div class="gallery-item">
+      <img src="images/1.png" alt="图1">
+      <div class="caption">西王母画像砖（成都市新都区新龙乡）（现存四川省博物馆）（昂首翘尾）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/2.png" alt="图2">
+      <div class="caption">西王母画像砖（山东嘉祥纸坊）（昂首前行）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/3.png" alt="图3">
+      <div class="caption">西王母画像砖（河南新野出⼟）（昂首前行）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/4.西王母画像砖（四川彭⼭江⼝乡双河崖墓出⼟）（回首仰望）.png" alt="图3">
+      <div class="caption">西王母画像砖（四川彭⼭江⼝乡双河崖墓出⼟）（回首仰望）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/5.朱拓四川画像砖（右侧为西王母）（昂首前行）.png" alt="图3">
+      <div class="caption">朱拓四川画像砖（右侧为西王母）（昂首前行）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/6.西王母主题壁画（甘肃酒泉丁家闸5号墓）（昂首前行）.png" alt="图3">
+      <div class="caption">西王母主题壁画（甘肃酒泉丁家闸5号墓）（昂首前行）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/7.西王母画像砖（洛阳洛宁县出土）（昂首前行）.png" alt="图3">
+      <div class="caption">西王母画像砖（洛阳洛宁县出土）（昂首前行）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/8.西王母门楣画像（陕西绥德墓）（低首拖尾）.png" alt="图3">
+      <div class="caption">西王母门楣画像（陕西绥德墓）（低首拖尾）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/9.西王母画像（山东滕州桑村镇大郭村出土）有尾分梳齿八股的站姿八尾狐.png" alt="图3">
+      <div class="caption">西王母画像（山东滕州桑村镇大郭村出土）有尾分梳齿八股的站姿八尾狐</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/10.西王母立柱画像（陕西靖边寨门）有尾分梳齿七股昂首翘尾的七尾狐.png" alt="图3">
+      <div class="caption">西王母立柱画像（陕西靖边寨门）有尾分梳齿七股昂首翘尾的七尾狐</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/11.西王母画像砖（成都市新都区新繁镇清白乡画像砖）（昂首翘尾）.jpg" alt="图3">
+      <div class="caption">西王母画像砖（成都市新都区新繁镇清白乡画像砖）（昂首翘尾）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/12.九尾狐画像铜匜（淮阴高庄战国墓）（回首奔跑，尾呈树枝状分九股，嘴尖直耳）.jpeg" alt="图3">
+      <div class="caption">九尾狐画像铜匜（淮阴高庄战国墓）（回首奔跑，尾呈树枝状分九股，嘴尖直耳）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/13.九尾狐壁画（洛阳卜千秋壁画墓）（昂首奔腾，一条大尾，嘴尖耳直）.jpeg" alt="图3">
+      <div class="caption">九尾狐壁画（洛阳卜千秋壁画墓）（昂首奔腾，一条大尾，嘴尖耳直）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/14.九尾狐画像砖（新野樊集汉画像砖墓）（行走，尾呈梳齿状分数股）.jpg" alt="图3">
+      <div class="caption">九尾狐画像砖（新野樊集汉画像砖墓）（行走，尾呈梳齿状分数股）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/15.九尾狐刻本（胡文焕《山海经图》）（从尾部发源，呈并拢状聚合）.png" alt="图3">
+      <div class="caption">九尾狐刻本（胡文焕《山海经图》）（从尾部发源，呈并拢状聚合）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/16.九尾狐刻纹铜箅形器（淮阴高庄战国墓）.png" alt="图3">
+      <div class="caption">九尾狐刻纹铜箅形器（淮阴高庄战国墓）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/17.九尾狐刻本蒋应镐《山海经图》（爬行，尾部毛绒蓬松）.jpeg" alt="图3">
+      <div class="caption">九尾狐刻本蒋应镐《山海经图》（爬行，尾部毛绒蓬松）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/18.九尾狐刻本（（汪绂《山海经存》）（爬行，尾部毛绒蓬松分九股）.jpeg" alt="图3">
+      <div class="caption">九尾狐刻本（（汪绂《山海经存》）（爬行，尾部毛绒蓬松分九股）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/19.九尾狐画卷（《怪奇鸟兽图卷》）（回首，爬行，尾部毛绒蓬松分九股）.jpeg" alt="图3">
+      <div class="caption">九尾狐画卷（《怪奇鸟兽图卷》）（回首，爬行，尾部毛绒蓬松分九股）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/20.《卜千秋夫妇升仙图》.png" alt="图3">
+      <div class="caption">《卜千秋夫妇升仙图》</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/21.西王母画像石（汉代嘉祥地区洪山村）（蹲坐佩带长剑九尾狐，九尾狐尾部为九个分叉）.png" alt="图3">
+      <div class="caption">西王母画像石（汉代嘉祥地区洪山村）（蹲坐佩带长剑九尾狐，九尾狐尾部为九个分叉）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/22.河南郑州画像砖（尾部分叉朝两边开）.png" alt="图3">
+      <div class="caption">河南郑州画像砖（尾部分叉朝两边开）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/23.狐首力士（高台骆驼城苦水墓）.png" alt="图3">
+      <div class="caption">狐首力士（高台骆驼城苦水墓）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/24.西王母画像砖（山东滕州桑村镇西户口出土）.jpg" alt="图3">
+      <div class="caption">西王母画像砖（山东滕州桑村镇西户口出土）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/25.九尾狐画像砖（陕西绥德出土）（一尾无分叉）.jpeg" alt="图3">
+      <div class="caption">九尾狐画像砖（陕西绥德出土）（一尾无分叉）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/26.九尾狐画像砖（陕西绥德出土2）（九股）.jpeg" alt="图3">
+      <div class="caption">九尾狐画像砖（陕西绥德出土2）（九股）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/28.九尾狐画像砖（陕西靖边出土）（七股）.jpeg" alt="图3">
+      <div class="caption">九尾狐画像砖（陕西靖边出土）（七股）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/29.铜牌饰（重庆巫山县出土）（五股）.jpeg" alt="图3">
+      <div class="caption">铜牌饰（重庆巫山县出土）（五股）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/30.日月画像砖（山东安丘出土）（九尾狐与三足乌位于日轮中）.jpeg" alt="图3">
+      <div class="caption">日月画像砖（山东安丘出土）（九尾狐与三足乌位于日轮中）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/31.日月画像砖（山东临沂市白庄出土）（ 九尾狐与三足乌位于伏羲身体的日轮中）.jpeg" alt="图3">
+      <div class="caption">日月画像砖（山东临沂市白庄出土）（ 九尾狐与三足乌位于伏羲身体的日轮中）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/32.马王堆神兽云气纹图 .jpeg" alt="图3">
+      <div class="caption">马王堆神兽云气纹图 </div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/33.偃师 M1 隔梁壁画.jpeg" alt="图3">
+      <div class="caption">偃师 M1 隔梁壁画</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/34.西王母画像砖.jpeg" alt="图3">
+      <div class="caption">西王母画像砖</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/35.马王堆 T 形帛画.jpeg" alt="图3">
+      <div class="caption">马王堆 T 形帛画</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/36.西王母画像砖（河南郑州二里岗）（两侧分九股）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（河南郑州二里岗）（两侧分九股）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/37西王母画像砖（河南新密）（一侧分九股）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（河南新密）（一侧分九股）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/38.西王母画像砖（河南郑州）（一侧分四股）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（河南郑州）（一侧分四股）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/39.西王母画像砖（山东邹城高庄乡金斗山）（祠堂构件） （两侧分九股）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（山东邹城高庄乡金斗山）（祠堂构件） （两侧分九股）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/40.西王母画像砖（密县打虎亭汉墓主室门正面画像）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（密县打虎亭汉墓主室门正面画像）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/41.西王母画像砖（新密周岗汉画空心砖墓）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（新密周岗汉画空心砖墓）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/42.西王母画像砖（陕北田鲂墓墓门楣画像石）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（陕北田鲂墓墓门楣画像石）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/43.西王母画像砖（彭山县江口乡梅花村崖墓）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（彭山县江口乡梅花村崖墓）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/44.西王母画像砖（新津县.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（新津县）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/45.西王母画像砖（郫县二号石棺）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（郫县二号石棺）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/46.偃师新莽壁画墓西王母线描图.jpeg" alt="图3">
+      <div class="caption">偃师新莽壁画墓西王母线描图</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/47.樊集吊窑西王母画像砖线描图.jpeg" alt="图3">
+      <div class="caption">樊集吊窑西王母画像砖线描图</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/48.嘉祥县嘉祥村西王母画像石线描图.jpeg" alt="图3">
+      <div class="caption">嘉祥县嘉祥村西王母画像石线描图</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/49.西王母画像砖（郑州新通桥汉画空心砖墓）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（郑州新通桥汉画空心砖墓）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/50.西王母画像砖（现存南阳汉画馆）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（现存南阳汉画馆）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/51.西王母画像砖（新野樊集吊窑M37墓）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（新野樊集吊窑M37墓）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/52.西王母画像砖（滕州桑村镇西户口村）（祠堂构件）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（滕州桑村镇西户口村）（祠堂构件）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/53.西王母画像石（陕西神木大堡当M5墓门画像石）.jpg" alt="图3">
+      <div class="caption">西王母画像石（陕西神木大堡当M5墓门画像石）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/54.西王母画像石（陕西米脂县1981 年墓门左右立柱画像）（处悬圃之间）.jpeg" alt="图3">
+      <div class="caption">西王母画像石（陕西米脂县1981 年墓门左右立柱画像）（处悬圃之间）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/55.西王母画像石（陕西神木大保当 M17 墓1998 年墓门画像）（处悬圃间）.jpeg" alt="图3">
+      <div class="caption">西王母画像石（陕西神木大保当 M17 墓1998 年墓门画像）（处悬圃间）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/56.西王母画像石（陕西绥德1975 年墓门右立柱画像）（悬圃间）.jpeg" alt="图3">
+      <div class="caption">西王母画像石（陕西绥德1975 年墓门右立柱画像）（悬圃间）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/57.西王母画像石（陕西绥德1976 年墓门左右立柱画像）（悬圃间）.jpeg" alt="图3">
+      <div class="caption">西王母画像石（陕西绥德1976 年墓门左右立柱画像）（悬圃间）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/58.西王母画像石（陕西榆林牛家梁乡古城滩村 1955 年墓门左右立柱画像）（悬圃间）.jpeg" alt="图3">
+      <div class="caption">西王母画像石（陕西榆林牛家梁乡古城滩村 1955 年墓门左右立柱画像）（悬圃间）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/59.西王母画像砖（山西离石墓门画像）（悬圃间）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（山西离石墓门画像）（悬圃间）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/60.西王母画像砖（陕西绥德县四十里铺 1975 年墓门楣画像）（鸡首人身后）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（陕西绥德县四十里铺 1975 年墓门楣画像）（鸡首人身后）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/61.西王母画像砖（成都市新都区新民乡梓潼村M3 墓1987 年）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（成都市新都区新民乡梓潼村M3 墓1987 年）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/62.西王母画像砖（四川省博物馆藏（成都市收集1985 年）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（四川省博物馆藏（成都市收集1985 年）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/63.西王母画像砖（四川大学博物馆藏）（成都市西门外1942 年.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（四川大学博物馆藏）（成都市西门外1942 年）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/64.西王母画像砖（四川省博物馆藏）（彭山县收集1943 年）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（四川省博物馆藏）（彭山县收集1943 年）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/65.西王母画像砖（四川省博物馆藏）（新津县）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（四川省博物馆藏）（新津县）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/66.西王母画像砖（大邑县文管所藏）（大邑县董场乡1988 年）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（大邑县文管所藏）（大邑县董场乡1988 年）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/67.西王母画像砖（青乐山麻浩崖墓博物馆藏）（彭山一号石棺彭山县江口乡双河崖墓 1983 年.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（青乐山麻浩崖墓博物馆藏）（彭山一号石棺彭山县江口乡双河崖墓 1983 年）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/68.西王母画像砖（四川省博物馆藏）（郫县四号石棺郫县新胜乡1974 年）.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（四川省博物馆藏）（郫县四号石棺郫县新胜乡1974 年）</div>
+    </div>
+    <div class="gallery-item">
+      <img src="images/69.西王母画像砖（泸州市博物馆藏）（合江四号石棺合江张家沟崖墓1994 年.jpeg" alt="图3">
+      <div class="caption">西王母画像砖（泸州市博物馆藏）（合江四号石棺合江张家沟崖墓1994 年</div>
+    </div>
+
+    <!-- 继续添加更多 .gallery-item 块 -->
+  </div>
+
+  <div class="overlay" id="overlay" onclick="hideOverlay()">
+    <div class="overlay-content" onclick="event.stopPropagation()">
+      <span class="overlay-close" onclick="hideOverlay()">&times;</span>
+      <img id="overlay-img" src="" alt="全图展示">
+      <div class="caption" id="overlay-caption"></div>
+    </div>
+  </div>
+  <div class="overlay" id="overlay" onclick="hideOverlay()">
+    <div class="overlay-content" onclick="event.stopPropagation()">
+      <span class="overlay-close" onclick="hideOverlay()">&times;</span>
+      <img id="overlay-img" src="" alt="全图展示">
+      <div class="caption" id="overlay-caption"></div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const img = item.querySelector('img');
+        const caption = item.querySelector('.caption');
+        document.getElementById('overlay-img').src = img.src;
+        document.getElementById('overlay-caption').innerText = caption.innerText;
+        document.getElementById('overlay').style.display = 'flex';
+      });
+    });
+
+    function hideOverlay() {
+      document.getElementById('overlay').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
+

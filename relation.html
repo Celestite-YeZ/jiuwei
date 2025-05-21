@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>九尾狐关系图谱</title>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background: url('database-bg.png') center/cover fixed;
+            font-family: 'ZCOOL XiaoWei', cursive;
+            overflow-x: hidden;
+            animation: fadeSlideIn 0.8s ease-out;
+        }
+
+        @keyframes fadeSlideIn {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeSlideOut {
+            to {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+        }
+
+        #network {
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        .vis-node {
+            border-radius: 8px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            transition: all 0.3s ease !important;
+            border: 2px solid #874633 !important;
+            white-space: normal !important;
+            word-break: break-word !important;
+        }
+
+        .vis-node:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+            z-index: 10;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: rgba(135,70,51,0.9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">← 返回</button>
+    <div id="network"></div>
+
+    <script>
+        function goBack() {
+            document.body.style.animation = 'fadeSlideOut 0.6s forwards';
+            setTimeout(() => {
+                window.history.back();
+            }, 600);
+        }
+
+        let network = null;
+        let allNodes = [];
+        let allEdges = [];
+        const expandedNodes = new Set();
+        const nodeChildren = new Map();
+
+        fetch('data.json')
+            .then(response => response.json())
+            .then(fullData => {
+                allNodes = fullData.nodes.map(node => ({
+                    ...node,
+                    label: insertNewlines(node.label, 25)
+                }));
+                allEdges = fullData.edges;
+                initNetwork();
+            });
+
+        function initNetwork() {
+            const container = document.getElementById('network');
+            const { nodes, edges } = getInitialData();
+
+            network = new vis.Network(container, {
+                nodes: new vis.DataSet(nodes),
+                edges: new vis.DataSet(edges)
+            }, getNetworkOptions());
+
+            bindEvents();
+        }
+
+        function bindEvents() {
+            network.on('click', (params) => {
+                if (!params.nodes.length) return;
+
+                const nodeId = params.nodes[0];
+                const isExpanded = expandedNodes.has(nodeId);
+
+                if (isExpanded) {
+                    collapseNode(nodeId);
+                } else {
+                    expandNode(nodeId);
+                }
+
+                updateNodeColor(nodeId);
+            });
+        }
+
+        function expandNode(nodeId) {
+            const childEdges = allEdges.filter(e => e.from === nodeId);
+            const parentGroup = network.body.data.nodes.get(nodeId).group;
+
+            const children = childEdges.map(e => {
+                const childNode = allNodes.find(n => n.id === e.to);
+                return {
+                    node: {
+                        ...childNode,
+                        group: parentGroup // 子节点继承父节点颜色组
+                    },
+                    edge: e
+                };
+            });
+
+            nodeChildren.set(nodeId, children);
+            network.body.data.nodes.add(children.map(c => c.node));
+            network.body.data.edges.add(children.map(c => c.edge));
+
+            expandedNodes.add(nodeId);
+            network.fit({ nodes: [nodeId], animation: true });
+
+            children.forEach(child => {
+                const defaultColor = getNodeColor(child.node.group, false);
+                network.body.data.nodes.update({
+                    id: child.node.id,
+                    color: {
+                        background: defaultColor,
+                        border: '#874633'
+                    }
+                });
+            });
+        }
+
+        function collapseNode(nodeId) {
+            const children = nodeChildren.get(nodeId) || [];
+            children.forEach(child => {
+                collapseNode(child.node.id);
+                network.body.data.nodes.remove(child.node.id);
+                network.body.data.edges.remove(child.edge.id);
+                expandedNodes.delete(child.node.id);
+            });
+
+            expandedNodes.delete(nodeId);
+            nodeChildren.delete(nodeId);
+        }
+
+        function updateNodeColor(nodeId) {
+            const isExpanded = expandedNodes.has(nodeId);
+            const node = network.body.data.nodes.get(nodeId);
+            node.color = {
+                background: getNodeColor(node.group, isExpanded),
+                border: '#874633'
+            };
+            network.body.data.nodes.update(node);
+        }
+
+        function insertNewlines(text, maxLen) {
+            return text.match(new RegExp(`.{1,${maxLen}}`, 'g')).join('\n');
+        }
+
+        function getNodeColor(group, isExpanded) {
+            const baseColors = {
+                '核心': ['#874633', '#6B3628'],
+                '先秦': ['#f8e8b0', '#e0c462'],
+                '汉代': ['#edc2a2', '#d19173'],
+                '魏晋': ['#ccc8ae', '#9f9b88'],
+                '唐宋': ['#b1d5c8', '#83b5a5'],
+                '元明清': ['#f0c9cf', '#db97a1']
+            };
+            return isExpanded ? baseColors[group]?.[1] || '#D4B59E'
+                             : baseColors[group]?.[0] || '#F4E7D3';
+        }
+
+        function getInitialData() {
+            return {
+                nodes: allNodes.filter(n => 
+                    n.group === '核心' || ['先秦','汉代','魏晋','唐宋','元明清'].includes(n.label)
+                ),
+                edges: allEdges.filter(e => e.label === '朝代')
+            };
+        }
+
+        function getNetworkOptions() {
+            return {
+                nodes: {
+                    shape: 'box',
+                    font: {
+                        size: 16,
+                        face: 'ZCOOL XiaoWei',
+                        color: '#5C3A21',
+                        multi: true,
+                        bold: { color: '#5C3A21' }
+                    },
+                    margin: 10,
+                    widthConstraint: {
+                        maximum: 200
+                    }
+                },
+                physics: {
+                    stabilization: {
+                        iterations: 2000
+                    }
+                }
+            };
+        }
+    </script>
+</body>
+</html>

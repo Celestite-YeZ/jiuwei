@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>九尾狐文化谱系图</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: url('database-bg.png') center/cover fixed;
+      font-family: 'ZCOOL XiaoWei', cursive;
+      animation: fadeIn 1.2s ease-out both;
+    }
+    #tree {
+      width: 100vw;
+      height: 100vh;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background: rgba(135, 70, 51, 0.9);
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      z-index: 999;
+      transition: background 0.3s;
+    }
+    .back-btn:hover {
+      background: #5C3A21;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+ <a href="index.html" class="back-btn">← 返回</a>
+
+
+  <div id="tree"></div>
+  <script>
+    function applyCustomStyle(node) {
+      if (node.name === '形象偏向') {
+        node.label = Object.assign({}, node.label || {}, {
+          backgroundColor: '#fddde6', color: '#5C3A21'
+        });
+      } else if (node.name === '积极') {
+        node.label = Object.assign({}, node.label || {}, {
+          backgroundColor: '#b0e57c', color: '#5C3A21'
+        });
+      } else if (node.name === '消极') {
+        node.label = Object.assign({}, node.label || {}, {
+          backgroundColor: '#ffb085', color: '#5C3A21'
+        });
+      } else if (node.name === '中性') {
+        node.label = Object.assign({}, node.label || {}, {
+          backgroundColor: '#c7d3ec', color: '#5C3A21'
+        });
+      } else if (node.name.includes('《') && node.name.includes('》')) {
+        node.label = Object.assign({}, node.label || {}, {
+          backgroundColor: '#ccf3f2', color: '#5C3A21'
+        });
+      }
+      if (node.children) {
+        node.children = node.children.map(child => applyCustomStyle(child));
+      }
+      return node;
+    }
+
+    fetch('jiuweihu_renamed_emotion.json')
+      .then(res => res.json())
+      .then(data => {
+        const treeChart = echarts.init(document.getElementById('tree'));
+        const optionTree = {
+          backgroundColor: 'rgba(255,255,255,0.05)',
+          tooltip: {
+            trigger: 'item', triggerOn: 'mousemove',
+            textStyle: {
+              fontFamily: 'ZCOOL XiaoWei', fontSize: 14
+            },
+            backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 6, padding: 10
+          },
+          series: [{
+            type: 'tree',
+            data: [applyCustomStyle(data)],
+            top: '5%',
+            left: '12%',
+            bottom: '5%',
+            right: '12%',
+            symbol: 'rect',
+            symbolSize: 14,
+            roam: true,
+            label: {
+              formatter: function(params) {
+                return params.name.match(/.{1,30}/g)?.join('\n');
+              },
+              backgroundColor: 'rgba(255,255,255,0.85)',
+              borderColor: '#874633',
+              borderWidth: 1,
+              borderRadius: 6,
+              padding: [5, 8],
+              position: 'left',
+              verticalAlign: 'middle',
+              align: 'right',
+              fontSize: 14,
+              fontFamily: 'ZCOOL XiaoWei',
+              color: '#5C3A21',
+              lineHeight: 22
+            },
+            leaves: {
+              label: {
+                position: 'right',
+                align: 'left'
+              }
+            },
+            lineStyle: {
+              color: '#874633',
+              width: 1.4,
+              curveness: 0.25
+            },
+            expandAndCollapse: true,
+            animationDuration: 1000,
+            animationDurationUpdate: 800,
+            initialTreeDepth: 1
+          }]
+        };
+        treeChart.setOption(optionTree);
+
+        // 点击节点将其置顶为最高层级
+        treeChart.on('click', function (params) {
+          if (params && params.event && params.event.event) {
+            const targetEl = params.event.event.target;
+            if (targetEl && targetEl.parentNode) {
+              targetEl.parentNode.appendChild(targetEl);
+            }
+          }
+        });
+      });
+  </script>
+</body>
+</html>
