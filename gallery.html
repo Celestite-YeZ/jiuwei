@@ -50,19 +50,24 @@
       align-items: center;
       z-index: 999;
     }
-    .overlay-content {
-      max-width: 80vw;
-      max-height: 80vh;
-      position: relative;
-      background: #fff;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    }
-    .overlay img {
-      width: 100%;
-      height: auto;
-    }
+.overlay-content {
+  max-width: 90vw;
+  max-height: 90vh;
+  position: relative;
+  background: #fff;
+  border-radius: 10px;
+  overflow: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  padding: 12px;
+}
+
+.overlay img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
     .overlay .caption {
       background: #f9f9f9;
       font-size: 18px;
