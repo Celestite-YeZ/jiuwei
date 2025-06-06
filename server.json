@@ -1,0 +1,47 @@
+// server.js
+import express from 'express';
+import bodyParser from 'body-parser';
+import fs from 'fs/promises';
+import OpenAI from 'openai';
+import cors from 'cors';
+
+const app = express();
+const openai = new OpenAI({ apiKey: '你的-OpenAI-API-Key' });
+
+app.use(cors());
+app.use(bodyParser.json());
+
+app.post('/ai-search', async (req, res) => {
+  const question = req.body.question;
+  if (!question) return res.status(400).send({ error: '问题不能为空' });
+
+  // 读取本地 JSON 文件内容
+  const files = ['jiuweihu_renamed_emotion.json', 'data.json', 'dynasty.json', 'gallery_images.json'];
+  let contentBlocks = [];
+
+  for (const file of files) {
+    try {
+      const raw = await fs.readFile(`./data/${file}`, 'utf-8');
+      const data = JSON.parse(raw);
+      contentBlocks.push(`${file}:\n` + JSON.stringify(data).slice(0, 5000)); // 防止内容太长，截断
+    } catch (err) {
+      console.warn(`${file} 读取失败`, err.message);
+    }
+  }
+
+  const fullContext = contentBlocks.join('\n\n');
+
+  // 发送到 OpenAI 分析
+  const completion = await openai.chat.completions.create({
+    model: 'gpt-4-turbo',
+    messages: [
+      { role: 'system', content: '你是九尾狐文化搜索助手，专门根据本地资料回答用户问题。' },
+      { role: 'user', content: `用户问题：${question}\n\n请根据以下本地内容尽量准确回答：\n${fullContext}` }
+    ],
+    temperature: 0.3,
+  });
+
+  res.send({ answer: completion.choices[0].message.content });
+});
+
+app.listen(3000, () => console.log('✅ AI 搜索接口已启动：http://localhost:3000'));

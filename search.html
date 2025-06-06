@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>搜索结果 - 九尾狐文化库</title>
+  <style>
+    body {
+      font-family: 'ZCOOL XiaoWei', cursive;
+      background: url('background.png') center/cover no-repeat fixed;
+      margin: 0;
+      padding: 0 5vw;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      padding: 1em 0;
+      color: #5C3A21;
+    }
+    .result {
+      background: rgba(255, 255, 255, 0.8);
+      border-left: 5px solid #874633;
+      margin: 1em 0;
+      padding: 1em;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .highlight {
+      background-color: yellow;
+      font-weight: bold;
+    }
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background: rgba(135, 70, 51, 0.9);
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      z-index: 999;
+    }
+    .back-btn:hover {
+      background: #5C3A21;
+    }
+    .search-bar {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .search-input {
+      width: 50%;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #874633;
+      border-radius: 6px;
+    }
+    .result img {
+      max-width: 100%;
+      max-height: 300px;
+      margin-top: 10px;
+      border-radius: 6px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <a href="search_page.html" class="back-btn">← 返回搜索页</a>
+  <h1>搜索结果</h1>
+  <div class="search-bar">
+    <input type="text" id="searchBox" class="search-input" placeholder="再次搜索...">
+  </div>
+  <div id="results"></div>
+
+  <script>
+    const resultsDiv = document.getElementById('results');
+
+    async function fetchAndSearch(query) {
+      if (!query) {
+        resultsDiv.innerHTML = '<p>请输入搜索关键词。</p>';
+        return;
+      }
+
+      const files = [
+        { name: 'jiuweihu_renamed_emotion.json' },
+        { name: 'data.json' },
+        { name: 'dynasty.json' }
+      ];
+
+      let allResults = [];
+
+      for (const file of files) {
+        try {
+          const res = await fetch(file.name);
+          const data = await res.json();
+
+          function searchInNode(node) {
+            let output = [];
+            if (typeof node === 'object' && node !== null) {
+              if (Object.values(node).some(val => typeof val === 'string' && val.toLowerCase().includes(query.toLowerCase()))) {
+                const source = extractSource(Object.values(node).join(''));
+                const text = Object.values(node).join('、');
+                const imageTag = findImageUrl(node);
+                output.push(`<div class="result">
+                  <p><strong>来源：</strong>${source}</p>
+                  <p><strong>原文：</strong>${highlightText(text, query)}</p>
+                  ${imageTag}
+                </div>`);
+              }
+              for (const key in node) {
+                output = output.concat(searchInNode(node[key]));
+              }
+            }
+            return output;
+          }
+
+          function extractSource(text) {
+            const match = text.match(/《[^》]{2,30}》/);
+            return match ? match[0] : '未知';
+          }
+
+          function highlightText(val, keyword) {
+            const reg = new RegExp(`(${keyword})`, 'gi');
+            return String(val).replace(reg, '<span class="highlight">$1</span>');
+          }
+
+          function findImageUrl(obj) {
+            for (const key in obj) {
+              if (typeof obj[key] === 'string' && obj[key].match(/\.(jpg|png|jpeg|gif)$/i)) {
+                return `<img src="${obj[key]}" alt="相关图片">`;
+              }
+            }
+            return '';
+          }
+
+          const matches = searchInNode(data);
+          allResults = allResults.concat(matches);
+
+        } catch (err) {
+          console.error('读取文件失败:', file.name, err);
+        }
+      }
+
+      resultsDiv.innerHTML = allResults.length > 0 ? allResults.join('') : '<p>没有找到相关内容。</p>';
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const queryParam = params.get('query');
+    document.getElementById('searchBox').value = queryParam || '';
+    fetchAndSearch(queryParam);
+
+    document.getElementById('searchBox').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const newQuery = e.target.value.trim();
+        if (newQuery) {
+          window.location.href = `search.html?query=${encodeURIComponent(newQuery)}`;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

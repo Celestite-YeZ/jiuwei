@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>九尾狐文化智能问答</title>
+  <style>
+    body {
+      background-image: url('background.png');
+      background-size: cover;
+      background-attachment: fixed;
+      font-family: 'STSong', 'SimSun', serif;
+      margin: 0;
+      padding: 0;
+    }
+    #chat-container {
+      max-width: 800px;
+      margin: 60px auto;
+      border: 2px solid #874633;
+      border-radius: 15px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 20px rgba(135, 70, 51, 0.3);
+    }
+    h2 {
+      text-align: center;
+      color: #874633;
+      margin-bottom: 1em;
+      font-size: 2em;
+    }
+    #chat-history {
+      height: 400px;
+      overflow-y: auto;
+      padding: 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      background: #fffaf5;
+    }
+    .message {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1em;
+    }
+    .user-msg {
+      justify-content: flex-end;
+      text-align: right;
+      color: #874633;
+    }
+    .bot-msg {
+      justify-content: flex-start;
+      text-align: left;
+      color: #5C3A21;
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin: 0 10px;
+    }
+    .bubble {
+      max-width: 65%;
+      padding: 10px 15px;
+      border-radius: 12px;
+      line-height: 1.6em;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 1em;
+    }
+    .user-msg .bubble {
+      background-color: #ffefd5;
+      border-top-right-radius: 0;
+    }
+    .bot-msg .bubble {
+      background-color: #f5f5f5;
+      border-top-left-radius: 0;
+    }
+    #input-area {
+      display: flex;
+      justify-content: center;
+    }
+    #user-input {
+      width: 75%;
+      padding: 12px;
+      font-size: 1em;
+      border: 1px solid #874633;
+      border-radius: 8px;
+      margin-right: 1em;
+      background-color: #fffaf5;
+      color: #4b2e1e;
+    }
+    #send-btn {
+      width: 15%;
+      padding: 12px;
+      background: #874633;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    #send-btn:hover {
+      background: #5C3A21;
+    }
+    .dot-loading {
+      font-size: 24px;
+      color: #874633;
+      animation: blink 1s infinite alternate;
+    }
+    @keyframes blink {
+      0% { opacity: 0.1; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-container">
+    <h2>九尾狐文化智能问答</h2>
+    <div id="chat-history"></div>
+    <div id="input-area">
+      <input type="text" id="user-input" placeholder="输入关于九尾狐的问题...">
+      <button id="send-btn">发送</button>
+    </div>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chat-history');
+
+    // 加载默认欢迎语
+    window.addEventListener('DOMContentLoaded', () => {
+      const welcome = document.createElement('div');
+      welcome.className = 'message bot-msg';
+      welcome.innerHTML = `
+        <img src="ai.png" alt="ai" class="avatar">
+        <div class="bubble">你好，我是小狐！有什么关于九尾狐的问题都可以问我哦~</div>
+      `;
+      chat.appendChild(welcome);
+    });
+
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const question = input.value.trim();
+      if (!question) return;
+
+      // 显示用户消息
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user-msg';
+      userMsg.innerHTML = `<div class="bubble">${question}</div><img src="user.png" alt="user" class="avatar">`;
+      chat.appendChild(userMsg);
+      input.value = '';
+      chat.scrollTop = chat.scrollHeight;
+
+      // 显示加载中
+      const botMsg = document.createElement('div');
+      botMsg.className = 'message bot-msg';
+      botMsg.innerHTML = `
+        <img src="ai.png" alt="ai" class="avatar">
+        <div class="bubble">
+          小狐正在思考中，请稍后... <span class="dot-loading">•</span>
+        </div>`;
+      chat.appendChild(botMsg);
+      chat.scrollTop = chat.scrollHeight;
+
+      try {
+        const res = await fetch('http://127.0.0.1:8000/ai-search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question })
+        });
+        const data = await res.json();
+        const answer = data.answer || '小狐暂时无法回答这个问题，请稍后再试。';
+        botMsg.querySelector('.bubble').textContent = answer;
+      } catch (err) {
+        botMsg.querySelector('.bubble').textContent = `请求失败：${err.message}`;
+      }
+    }
+
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+    document.getElementById('user-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+</body>
+</html>
